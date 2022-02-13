@@ -1,11 +1,40 @@
-<div class="flex flex-col min-h-screen min-w-full items-center justify-center">
-  <div class="flex flex-col rounded shadow-lg max-w-4xl w-full py-2">
-    <div class="flex flex-col">
-      <div class="flex flex-row">
-        <input type="text" class="border-b border-black" />
+<script lang="ts">
+  import TodoItem from "$lib/todoItem.svelte"
+  import {todos} from "./stores"
+
+  let todoInputValue: string = ""
+  const addTodo = () => {
+    const random = Math.random()
+    if ($todos.findIndex((t) => t.id === random) <= -1) {
+      $todos = [...$todos, {id: random, todo: todoInputValue, completed: false}]
+      todoInputValue = ""
+    } else {
+      addTodo()
+    }
+  }
+</script>
+
+{#if todos}
+  <div
+    class="flex flex-col min-h-screen min-w-full items-center justify-center"
+  >
+    <div class="flex flex-col rounded shadow-xl max-w-4xl w-full py-2">
+      <div
+        class="flex flex-row items-center border-b border-slate-200 w-full px-2"
+      >
+        <input
+          bind:value={todoInputValue}
+          on:keypress={({key}) => {
+            if (key === "Enter") addTodo()
+          }}
+          type="text"
+          placeholder="Add some todos"
+          class="flex-1 placeholder-slate-400 text-4xl font-thin px-1.5 py-3 focus:outline-none"
+        />
         <svg
+          on:click={addTodo}
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
+          class="cursor-pointer h-12 w-12 transform hover:scale-110 duration-200"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -16,6 +45,27 @@
           />
         </svg>
       </div>
+      <div class="flex flex-col w-full pt-4 space-y-2 h-80 overflow-auto">
+        {#if $todos.length <= 0}
+          <div
+            class="flex flex-col w-full h-full items-center justify-center -mt-4"
+          >
+            <p class="text-4xl font-thin">There're not any todos.</p>
+          </div>
+        {:else}
+          {#each $todos as t, i (t.id)}
+            <TodoItem
+              todoContent={t.todo}
+              bind:isCompleted={t.completed}
+              handleRemove={() =>
+                todos.update((prev) => {
+                  delete prev[i]
+                  return [...prev.filter((v) => v)]
+                })}
+            />
+          {/each}
+        {/if}
+      </div>
     </div>
   </div>
-</div>
+{/if}
