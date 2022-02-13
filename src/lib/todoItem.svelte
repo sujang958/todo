@@ -6,10 +6,10 @@
 </script>
 
 <div class="flex flex-row items-center w-full px-2.5 py-1" transition:fade>
-  <div class="px-3">
+  <div class="px-3.5">
     <input type="checkbox" class="w-8 h-8" bind:checked={isCompleted} />
   </div>
-  <div class="flex-1 px-1 -mt-2">
+  <div class="flex-1 px-1.5 -mt-2">
     <p
       class={`${
         isCompleted && "line-through"
