@@ -7,9 +7,13 @@
 
 <div class="flex flex-row items-center w-full px-2.5 py-1" transition:fade>
   <div class="px-3.5">
-    <input type="checkbox" class="w-8 h-8" bind:checked={isCompleted} />
+    <input
+      type="checkbox"
+      class="w-7 h-7 md:w-8 md:h-8"
+      bind:checked={isCompleted}
+    />
   </div>
-  <div class="flex-1 px-1.5 -mt-2">
+  <div class="flex-1 px-1.5 -mt-2 md:-mt-1.5">
     <p
       class={`${
         isCompleted && "line-through"
@@ -21,7 +25,7 @@
   <div class="px-3">
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      class="hover:fill-red-500 h-7 w-7 duration-500 -mt-0.5"
+      class="hover:fill-red-500 h-7 w-7 duration-500 -mt-0 md:-mt-0.5"
       viewBox="0 0 20 20"
       fill="currentColor"
       on:click={handleRemove}

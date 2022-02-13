@@ -22,7 +22,7 @@
       class="flex flex-col rounded shadow-xl max-w-sm md:max-w-4xl w-full py-2"
     >
       <div
-        class="flex flex-row items-center justify-stretch border-b border-slate-200 w-full pr-2 md:pr-4 overflow-hidden"
+        class="flex flex-row items-center justify-stretch border-b border-slate-200 w-full pr-3 md:pr-4 overflow-hidden"
       >
         <div class="flex-1">
           <input
@@ -32,7 +32,7 @@
             }}
             type="text"
             placeholder="Add some todos"
-            class="placeholder-slate-400 text-3xl md:text-4xl font-thin px-2 md:px-4 py-3 focus:outline-none w-full h-full"
+            class="placeholder-slate-400 text-3xl md:text-4xl font-thin px-3 md:px-4 py-3 focus:outline-none w-full h-full"
           />
         </div>
         <div class="cursor-pointer">
