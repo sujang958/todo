@@ -1,3 +1,4 @@
+import {browser} from "$app/env"
 import {writable} from "svelte/store"
 
 export type Todo = {
@@ -6,8 +7,10 @@ export type Todo = {
   completed: boolean
 }
 
-const stored = localStorage.todos
+export const todos = writable<Todo[]>(
+  (browser && JSON.parse(localStorage.getItem("todos"))) || []
+)
 
-export const todos = writable<Todo[]>(stored ? JSON.parse(stored) : [])
-
-todos.subscribe((value) => (localStorage.todos = JSON.stringify(value)))
+todos.subscribe(
+  (value) => browser && localStorage.setItem("todos", JSON.stringify(value))
+)

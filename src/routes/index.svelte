@@ -29,7 +29,7 @@
           }}
           type="text"
           placeholder="Add some todos"
-          class="flex-1 placeholder-slate-400 text-4xl font-thin px-1.5 py-3 focus:outline-none"
+          class="flex-1 placeholder-slate-400 text-4xl font-thin px-1.5 py-3 focus:outline-none h-full"
         />
         <svg
           on:click={addTodo}
@@ -45,7 +45,7 @@
           />
         </svg>
       </div>
-      <div class="flex flex-col w-full pt-4 space-y-2 h-80 overflow-auto">
+      <div class="flex flex-col w-full pt-4 space-y-2 h-96 overflow-auto">
         {#if $todos.length <= 0}
           <div
             class="flex flex-col w-full h-full items-center justify-center -mt-4"
