@@ -22,30 +22,34 @@
       class="flex flex-col rounded shadow-xl max-w-sm md:max-w-4xl w-full py-2"
     >
       <div
-        class="flex flex-row items-center border-b border-slate-200 w-full px-3 md:px-2"
+        class="flex flex-row items-center justify-between border-b border-slate-200 w-full px-3 md:px-4 overflow-hidden"
       >
-        <input
-          bind:value={todoInputValue}
-          on:keypress={({key}) => {
-            if (key === "Enter") addTodo()
-          }}
-          type="text"
-          placeholder="Add some todos"
-          class="flex-1 placeholder-slate-400 text-3xl md:text-4xl font-thin py-3 focus:outline-none h-full"
-        />
-        <svg
-          on:click={addTodo}
-          xmlns="http://www.w3.org/2000/svg"
-          class="cursor-pointer h-10 w-10 mt-1 md:h-12 md:w-12 transform hover:scale-110 duration-200"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-            clip-rule="evenodd"
+        <div class="cursor-pointer w-1/2">
+          <input
+            bind:value={todoInputValue}
+            on:keypress={({key}) => {
+              if (key === "Enter") addTodo()
+            }}
+            type="text"
+            placeholder="Add some todos"
+            class="flex-1 placeholder-slate-400 text-3xl md:text-4xl font-thin py-3 focus:outline-none h-full"
           />
-        </svg>
+        </div>
+        <div class="cursor-pointer">
+          <svg
+            on:click={addTodo}
+            xmlns="http://www.w3.org/2000/svg"
+            class="mt-1 h-10 w-10 md:h-12 md:w-12 transform hover:scale-110 duration-200"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
       </div>
       <div
         class="flex flex-col w-full pt-4 space-y-3 md:space-y-2 h-96 overflow-auto"
