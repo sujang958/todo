@@ -18,9 +18,11 @@
   <div
     class="flex flex-col min-h-screen min-w-full items-center justify-center"
   >
-    <div class="flex flex-col rounded shadow-xl max-w-4xl w-full py-2">
+    <div
+      class="flex flex-col rounded shadow-xl max-w-sm md:max-w-4xl w-full py-2"
+    >
       <div
-        class="flex flex-row items-center border-b border-slate-200 w-full px-2"
+        class="flex flex-row items-center border-b border-slate-200 w-full px-3 md:px-2"
       >
         <input
           bind:value={todoInputValue}
@@ -29,12 +31,12 @@
           }}
           type="text"
           placeholder="Add some todos"
-          class="flex-1 placeholder-slate-400 text-4xl font-thin px-1.5 py-3 focus:outline-none h-full"
+          class="flex-1 placeholder-slate-400 text-3xl md:text-4xl font-thin py-3 focus:outline-none h-full"
         />
         <svg
           on:click={addTodo}
           xmlns="http://www.w3.org/2000/svg"
-          class="cursor-pointer h-12 w-12 transform hover:scale-110 duration-200"
+          class="cursor-pointer h-10 w-10 mt-1 md:h-12 md:w-12 transform hover:scale-110 duration-200"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -45,12 +47,14 @@
           />
         </svg>
       </div>
-      <div class="flex flex-col w-full pt-4 space-y-2 h-96 overflow-auto">
+      <div
+        class="flex flex-col w-full pt-4 space-y-3 md:space-y-2 h-96 overflow-auto"
+      >
         {#if $todos.length <= 0}
           <div
             class="flex flex-col w-full h-full items-center justify-center -mt-4"
           >
-            <p class="text-4xl font-thin">There're not any todos.</p>
+            <p class="text-4xl font-thin">"Have a nice day :)"</p>
           </div>
         {:else}
           {#each $todos as t, i (t.id)}
