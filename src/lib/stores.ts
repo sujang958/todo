@@ -10,7 +10,9 @@ export type Todo = {
 }
 
 export const todos = writable<{ [key: string]: Todo }>(
-  (browser && JSON.parse(localStorage.getItem("todos"))) || {}
+  browser && "length" in JSON.parse(localStorage.getItem("todos"))
+    ? {}
+    : JSON.parse(localStorage.getItem("todos")) ?? {}
 )
 
 todos.subscribe(
