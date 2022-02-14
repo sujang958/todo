@@ -1,12 +1,66 @@
 <script lang="ts">
   import TodoItem from "$lib/todoItem.svelte"
-  import {todos} from "./stores"
+  import { todos, user } from "$lib/stores"
+  import { auth, db, provider } from "$lib/firebase"
+  import { signInWithPopup, signOut } from "firebase/auth"
+  import { doc, setDoc, getDoc } from "firebase/firestore"
+  import { v4 as uuid } from "uuid"
 
   let todoInputValue: string = ""
+
+  const handleLogin = () => {
+    $user = { ...$user }
+    signInWithPopup(auth, provider)
+      .then(async () => {
+        const email = auth.currentUser.email
+        if (!email) return
+        const userRef = doc(db, "users", email)
+        const prevUser = await getDoc(userRef)
+        if (!prevUser.exists())
+          await setDoc(
+            userRef,
+            {
+              todos: [],
+            },
+            { merge: true }
+          )
+        $user = {
+          ...$user,
+          signedIn: true,
+          currentUser: auth.currentUser,
+        }
+      })
+      .catch(
+        () =>
+          ($user = {
+            ...$user,
+
+            signedIn: false,
+            currentUser: null,
+          })
+      )
+  }
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(
+        () =>
+          ($user = {
+            ...$user,
+            signedIn: false,
+            currentUser: null,
+          })
+      )
+      .catch(() => ($user = { ...$user }))
+  }
+
   const addTodo = () => {
-    const random = Math.random()
-    if ($todos.findIndex((t) => t.id === random) <= -1) {
-      $todos = [...$todos, {id: random, todo: todoInputValue, completed: false}]
+    const random = uuid()
+    if (!$todos[random]) {
+      $todos = {
+        ...$todos,
+        [random]: { todo: todoInputValue, completed: false },
+      }
       todoInputValue = ""
     } else {
       addTodo()
@@ -14,12 +68,28 @@
   }
 </script>
 
+{#if $user.signedIn}
+  <p
+    class="cursor-pointer text-lg text-gray-700 font-bold underline"
+    on:click={handleSignOut}
+  >
+    Logout
+  </p>
+{:else}
+  <p
+    class="cursor-pointer text-lg text-gray-700 font-bold underline"
+    on:click={handleLogin}
+  >
+    Login
+  </p>
+{/if}
+
 {#if todos}
   <div
     class="flex flex-col min-h-screen min-w-full items-center justify-center"
   >
     <div
-      class="flex flex-col rounded shadow-xl max-w-sm md:max-w-4xl w-full py-2"
+      class="flex flex-col rounded shadow-xl max-w-sm sm:max-w-lg md:max-w-4xl w-full py-2"
     >
       <div
         class="flex flex-row items-center justify-stretch border-b border-slate-200 w-full pr-3 md:pr-4 overflow-hidden"
@@ -27,7 +97,7 @@
         <div class="flex-1">
           <input
             bind:value={todoInputValue}
-            on:keypress={({key}) => {
+            on:keypress={({ key }) => {
               if (key === "Enter") addTodo()
             }}
             type="text"
@@ -54,21 +124,31 @@
       <div
         class="flex flex-col w-full pt-4 space-y-3 md:space-y-2 h-96 overflow-auto"
       >
-        {#if $todos.length <= 0}
+        {#if Object.entries($todos).length <= 0}
           <div
             class="flex flex-col w-full h-full items-center justify-center -mt-4"
           >
-            <p class="text-4xl font-thin">"Have a nice day :)"</p>
+            <p class="text-4xl font-thin">
+              {#if $user.currentUser}
+                "Hello {$user.currentUser.email}"
+              {:else}
+                "Have a ncie day :)"
+              {/if}
+            </p>
           </div>
         {:else}
-          {#each $todos as t, i (t.id)}
+          {#each Object.entries($todos) as [id, todo] (id)}
             <TodoItem
-              todoContent={t.todo}
-              bind:isCompleted={t.completed}
+              todoContent={todo.todo}
+              bind:isCompleted={$todos[id].completed}
               handleRemove={() =>
                 todos.update((prev) => {
-                  delete prev[i]
-                  return [...prev.filter((v) => v)]
+                  delete prev[id]
+                  return {
+                    ...Object.fromEntries(
+                      Object.entries(prev).filter((v) => v && v[1])
+                    ),
+                  }
                 })}
             />
           {/each}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import "../app.css"
-  import {MetaTags} from "svelte-meta-tags"
+  import { MetaTags } from "svelte-meta-tags"
 </script>
 
 <svelte:head>

@@ -3,8 +3,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        "noto-sans": ["Noto Sans KR", "sans-serif"]
-      }
+        "noto-sans": ["Noto Sans KR", "sans-serif"],
+      },
     },
   },
   plugins: [],
