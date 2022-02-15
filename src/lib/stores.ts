@@ -10,30 +10,20 @@ export type Todo = {
 }
 
 export const todos = writable<{ [key: string]: Todo }>(
-  browser && "length" in JSON.parse(localStorage.getItem("todos"))
-    ? {}
-    : JSON.parse(localStorage.getItem("todos")) ?? {}
+  browser &&
+    ("length" in JSON.parse(localStorage.getItem("todos"))
+      ? {}
+      : JSON.parse(localStorage.getItem("todos")) ?? {})
 )
 
 todos.subscribe(
-  (value) =>
-    browser &&
-    localStorage.setItem(
-      "todos",
-      JSON.stringify(
-        Object.fromEntries(Object.entries(value).filter((v) => v[1]))
-      )
-    )
+  (value) => browser && localStorage.setItem("todos", JSON.stringify(value))
 )
 todos.subscribe((todos) => {
   if (!auth.currentUser) return
-  setDoc(
-    doc(db, "users", auth.currentUser.email),
-    {
-      todos,
-    },
-    { merge: true }
-  )
+  setDoc(doc(db, "users", auth.currentUser.email), {
+    todos,
+  })
 })
 
 export const user = writable<{

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { flip } from "svelte/animate"
+  import { fade, slide } from "svelte/transition"
   import TodoItem from "$lib/todoItem.svelte"
   import { todos, user } from "$lib/stores"
   import { auth, db, provider } from "$lib/firebase"
@@ -68,26 +70,26 @@
   }
 </script>
 
-{#if $user.signedIn}
-  <p
-    class="cursor-pointer text-lg text-gray-700 font-bold underline"
-    on:click={handleSignOut}
-  >
-    Logout
-  </p>
-{:else}
-  <p
-    class="cursor-pointer text-lg text-gray-700 font-bold underline"
-    on:click={handleLogin}
-  >
-    Login
-  </p>
-{/if}
-
-{#if todos}
-  <div
-    class="flex flex-col min-h-screen min-w-full items-center justify-center"
-  >
+<div class="flex flex-col min-h-screen min-w-full items-center justify-center">
+  <div class="flex flex-row space-x-2.5">
+    {#if $user.signedIn}
+      <p
+        class="cursor-pointer text-lg text-gray-700 font-bold underline"
+        on:click={handleSignOut}
+      >
+        Logout
+      </p>
+    {:else}
+      <p
+        class="cursor-pointer text-lg text-gray-700 font-bold underline"
+        on:click={handleLogin}
+      >
+        Login
+      </p>
+    {/if}
+    <p class="cursor-pointer text-lg text-gray-700 font-bold underline">dark</p>
+  </div>
+  {#if todos}
     <div
       class="flex flex-col rounded shadow-xl max-w-sm sm:max-w-lg md:max-w-4xl w-full py-2"
     >
@@ -138,22 +140,24 @@
           </div>
         {:else}
           {#each Object.entries($todos) as [id, todo] (id)}
-            <TodoItem
-              todoContent={todo.todo}
-              bind:isCompleted={$todos[id].completed}
-              handleRemove={() =>
-                todos.update((prev) => {
-                  delete prev[id]
-                  return {
-                    ...Object.fromEntries(
-                      Object.entries(prev).filter((v) => v && v[1])
-                    ),
-                  }
-                })}
-            />
+            <div in:slide animate:flip={{ duration: 200 }}>
+              <TodoItem
+                todoContent={todo.todo}
+                bind:isCompleted={$todos[id].completed}
+                handleRemove={() =>
+                  todos.update((prev) => {
+                    delete prev[id]
+                    return {
+                      ...Object.fromEntries(
+                        Object.entries(prev).filter((v) => v && v[1])
+                      ),
+                    }
+                  })}
+              />
+            </div>
           {/each}
         {/if}
       </div>
     </div>
-  </div>
-{/if}
+  {/if}
+</div>

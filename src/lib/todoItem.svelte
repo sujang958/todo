@@ -1,15 +1,10 @@
 <script lang="ts">
-  import { fly } from "svelte/transition"
   export let todoContent: string = ""
   export let isCompleted: boolean = false
   export let handleRemove: () => void | any
 </script>
 
-<div
-  class="flex flex-row items-center w-full px-2.5 py-1"
-  in:fly={{ y: 30, duration: 200 }}
-  out:fly={{ y: -30, duration: 100 }}
->
+<div class="flex flex-row items-center w-full px-2.5 py-1">
   <div class="px-3.5">
     <input
       type="checkbox"
