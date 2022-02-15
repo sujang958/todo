@@ -4,7 +4,9 @@
   export let handleRemove: () => void | any
 </script>
 
-<div class="flex flex-row items-center w-full px-2.5 py-1">
+<div
+  class="flex flex-row items-center w-full px-2.5 py-1 text-black dark:text-gray-200"
+>
   <div class="px-3.5">
     <input
       type="checkbox"
@@ -13,11 +15,7 @@
     />
   </div>
   <div class="flex-1 px-1.5 -mt-2 md:-mt-1.5">
-    <p
-      class={`${
-        isCompleted && "line-through"
-      } text-black text-2xl font-thin break-all`}
-    >
+    <p class={`${isCompleted && "line-through"} text-2xl font-thin break-all`}>
       {todoContent}
     </p>
   </div>

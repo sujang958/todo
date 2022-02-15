@@ -1,12 +1,13 @@
 <script lang="ts">
   import { flip } from "svelte/animate"
-  import { fade, slide } from "svelte/transition"
+  import { slide } from "svelte/transition"
   import TodoItem from "$lib/todoItem.svelte"
-  import { todos, user } from "$lib/stores"
+  import { theme, todos, user } from "$lib/stores"
   import { auth, db, provider } from "$lib/firebase"
   import { signInWithPopup, signOut } from "firebase/auth"
   import { doc, setDoc, getDoc } from "firebase/firestore"
   import { v4 as uuid } from "uuid"
+  import { browser } from "$app/env"
 
   let todoInputValue: string = ""
 
@@ -68,13 +69,27 @@
       addTodo()
     }
   }
+
+  const toggleTheme = () => {
+    $theme = $theme === "dark" ? "light" : "dark"
+  }
+
+  $: if (browser) {
+    if ($theme === "light") {
+      document.body.classList.remove("dark")
+    } else {
+      document.body.classList.add("dark")
+    }
+  }
 </script>
 
-<div class="flex flex-col min-h-screen min-w-full items-center justify-center">
+<div
+  class="flex flex-col min-h-screen min-w-full items-center justify-center bg-white text-black dark:bg-slate-900 dark:text-white"
+>
   <div class="flex flex-row space-x-2.5">
     {#if $user.signedIn}
       <p
-        class="cursor-pointer text-lg text-gray-700 font-bold underline"
+        class="cursor-pointer text-lg dark:text-gray-200 text-gray-700 font-bold underline"
         on:click={handleSignOut}
       >
         Logout
@@ -87,14 +102,21 @@
         Login
       </p>
     {/if}
-    <p class="cursor-pointer text-lg text-gray-700 font-bold underline">dark</p>
+    {#if theme}
+      <p
+        class="cursor-pointer text-lg dark:text-gray-200 text-gray-700 font-bold underline"
+        on:click={toggleTheme}
+      >
+        dark
+      </p>
+    {/if}
   </div>
   {#if todos}
     <div
       class="flex flex-col rounded shadow-xl max-w-sm sm:max-w-lg md:max-w-4xl w-full py-2"
     >
       <div
-        class="flex flex-row items-center justify-stretch border-b border-slate-200 w-full pr-3 md:pr-4 overflow-hidden"
+        class="flex flex-row items-center justify-stretch border-b border-slate-200 dark:border-slate-700 w-full pr-3 md:pr-4 overflow-hidden dark:bg-gray-900"
       >
         <div class="flex-1">
           <input
@@ -104,7 +126,7 @@
             }}
             type="text"
             placeholder="Add some todos"
-            class="placeholder-slate-400 text-3xl md:text-4xl font-thin px-3 md:px-4 py-3 focus:outline-none w-full h-full"
+            class="placeholder-slate-400 text-3xl md:text-4xl font-thin px-3 md:px-4 py-3 focus:outline-none w-full h-full dark:bg-gray-900"
           />
         </div>
         <div class="cursor-pointer">

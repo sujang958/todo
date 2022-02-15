@@ -52,3 +52,9 @@ user.subscribe(async ({ currentUser }) => {
     })
   }
 })
+
+export const theme = writable(
+  (browser && localStorage.getItem("theme")) ?? "light"
+)
+
+theme.subscribe((v) => browser && localStorage.setItem("theme", String(v)))
