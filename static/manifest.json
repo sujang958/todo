@@ -1,0 +1,16 @@
+{
+  "short_name": "Todo",
+  "name": "Todo",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes": "1024x1024"
+    }
+  ],
+  "background_color": "#0f0f0f",
+  "display": "standalone",
+  "scope": "/",
+  "description": "Manage your tasks"
+}
